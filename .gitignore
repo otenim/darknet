@@ -7,6 +7,7 @@
 *.png
 *.jpg
 *.pyc
+results/
 old/
 mnist/
 data/

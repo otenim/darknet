@@ -1,6 +1,8 @@
-classes= 20
-train  = /home/pjreddie/data/voc/train.txt
-valid  = /home/pjreddie/data/voc/2007_test.txt
-names = data/voc.names
-backup = backup
+classes = 20
+train = /home/tsukada/Dev/darknet/datasets/VOCdevkit/train.txt
+valid = /home/tsukada/Dev/darknet/datasets/VOCdevkit/test.txt
+names = /home/tsukada/Dev/darknet/data/voc.names
+backup = /home/tsukada/Dev/darknet/results/voc
+
+
 
