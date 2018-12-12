@@ -29,3 +29,4 @@ Icon?
 Thumbs.db
 *.swp
 datasets/
+weights/
