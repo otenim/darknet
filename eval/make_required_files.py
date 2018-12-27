@@ -56,9 +56,15 @@ def main(args):
         for line in lines:
             line = line.strip()
             names.append(line)
+    names_converted = {}
+    print('=-=-=-=-=- name conversion -=-=-=-=-=')
+    for name in names:
+        names_converted[name] = name.replace(' ', '-')
+        print('%s => %s' % (name, names_converted[name]))
+    print('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=')
 
-    # convert test annotation files and save them
-    print('converting darknet-format annotation files...')
+    # convert test annotation files
+    print('converting darknet-format test annotation files...')
     labels_dirpath = os.path.join(os.path.dirname(os.path.dirname(test_img_paths[0])), 'labels')
     pbar = tqdm.tqdm(total=len(test_img_paths))
     for path in test_img_paths:
@@ -79,7 +85,7 @@ def main(args):
         with open(dst_ano_path, mode='w') as f:
             for b in buffer:
                 cid, xc, yc, w, h = b
-                cname = names[cid].replace(' ', '-')
+                cname = names_converted[names[cid]]
                 x_left = int(xc - w / 2)
                 y_top = int(yc - h / 2)
                 x_right = int(xc + w / 2)
@@ -89,8 +95,31 @@ def main(args):
     pbar.close()
 
     # load detector
+    print('loading detector...')
     net = darknet.load_net(args.cfg_path.encode(), args.weights_path.encode(), 0)
     meta = darknet.load_meta(args.data_path.encode())
+
+    # make predictions for test images
+    print('making predictions for test images...')
+    pbar = tqdm.tqdm(total=len(test_img_paths))
+    for path in test_img_paths:
+        bboxes = darknet.detect(net, meta, path)
+        img = Image.open(path)
+        img_w, img_h = img.width, img.height
+        prefix = os.path.basename(path).split('.')[0]
+        pred_path = os.path.join(args.predicted_dirpath, prefix + '.txt')
+        with open(pred_path, mode='w') as f:
+            for bbox in bboxes:
+                cname, conf, (xc, yc, w, h) = bbox
+                cname = names_converted[cname]
+                x_left = int(xc - w / 2)
+                y_top = int(yc - h / 2)
+                x_right = int(xc + w / 2)
+                y_bottom = int(yc + h / 2)
+                f.write('%s %f %d %d %d %d\n' % (cname, conf, x_left, y_top, x_right, y_bottom))
+        pbar.update()
+    pbar.close()
+
 
 if __name__ == '__main__':
     args = parser.parse_args()
