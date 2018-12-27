@@ -677,7 +677,7 @@ if draw_plot:
   plot_title = "Ground-Truth\n"
   plot_title += "(" + str(len(ground_truth_files_list)) + " files and " + str(n_classes) + " classes)"
   x_label = "Number of objects per class"
-  output_path = results_files_path + "/Ground-Truth Info.png"
+  output_path = results_files_path + "/ground_truth_info.png"
   to_show = False
   plot_color = 'forestgreen'
   draw_plot_func(
@@ -721,7 +721,7 @@ if draw_plot:
   plot_title += str(count_non_zero_values_in_dictionary) + " detected classes)"
   # end Plot title
   x_label = "Number of objects per class"
-  output_path = results_files_path + "/Predicted Objects Info.png"
+  output_path = results_files_path + "/predicted_objects_info.png"
   to_show = False
   plot_color = 'forestgreen'
   true_p_bar = count_true_positives
