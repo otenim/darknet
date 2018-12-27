@@ -29,8 +29,13 @@ def main(args):
         os.makedirs(args.predicted_dirpath)
 
     # remove files which are used before
-    subprocess.call(['rm', '%s' % os.path.join(args.annotations_dirpath, '*')])
-    subprocess.call(['rm', '%s' % os.path.join(args.predicted_dirpath, '*')])
+    for dirpath in [args.annotations_dirpath, args.predicted_dirpath]:
+        for path in os.listdir(dirpath):
+            format = path.split('.')[-1]
+            if format != 'txt':
+                continue
+            path = os.path.join(dirpath, path)
+            os.remove(path)
 
     # parse .data file
     valid_path, names_path = None, None
