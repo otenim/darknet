@@ -288,7 +288,7 @@ if show_animation:
    Create a list of all the class names present in the ground-truth (gt_classes).
 """
 # get a list with the ground-truth files
-ground_truth_files_list = glob.glob('annotations /*.txt')
+ground_truth_files_list = glob.glob('annotations/*.txt')
 if len(ground_truth_files_list) == 0:
   error("Error: No ground-truth files found!")
 ground_truth_files_list.sort()
@@ -388,8 +388,8 @@ for class_index, class_name in enumerate(gt_classes):
     file_id = txt_file.split(".txt",1)[0]
     file_id = os.path.basename(os.path.normpath(file_id))
     if class_index == 0:
-      if not os.path.exists('annotations /' + file_id + ".txt"):
-        error_msg = "Error. File not found: annotations /" +  file_id + ".txt\n"
+      if not os.path.exists('annotations/' + file_id + ".txt"):
+        error_msg = "Error. File not found: annotations/" +  file_id + ".txt\n"
         error_msg += "(You can avoid this error message by running extra/intersect-gt-and-pred.py)"
         error(error_msg)
     lines = file_lines_to_list(txt_file)
