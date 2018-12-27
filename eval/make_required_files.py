@@ -103,7 +103,7 @@ def main(args):
     print('making predictions for test images...')
     pbar = tqdm.tqdm(total=len(test_img_paths))
     for path in test_img_paths:
-        bboxes = darknet.detect(net, meta, path)
+        bboxes = darknet.detect(net, meta, path.encode())
         img = Image.open(path)
         img_w, img_h = img.width, img.height
         prefix = os.path.basename(path).split('.')[0]
