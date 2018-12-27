@@ -79,7 +79,7 @@ def main(args):
         with open(dst_ano_path, mode='w') as f:
             for b in buffer:
                 cid, xc, yc, w, h = b
-                cname = names[cid]
+                cname = names[cid].replace(' ', '-')
                 x_left = int(xc - img_w / 2)
                 y_top = int(yc - img_h / 2)
                 x_right = int(xc + img_w / 2)
