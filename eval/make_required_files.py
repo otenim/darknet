@@ -3,6 +3,7 @@ import argparse
 import darknet
 import tqdm
 import imghdr
+import subprocess
 from PIL import Image
 
 
@@ -26,6 +27,10 @@ def main(args):
         os.makedirs(args.annotations_dirpath)
     if os.path.exists(args.predicted_dirpath) == False:
         os.makedirs(args.predicted_dirpath)
+
+    # remove files which are used before
+    subprocess.call('rm %s' % os.path.join(args.annotations_dirpath, '*'))
+    subprocess.call('rm %s' % os.path.join(args.predicted_dirpath, '*'))
 
     # parse .data file
     valid_path, names_path = None, None
