@@ -22,6 +22,11 @@ def main(args):
     args.annotations_dirpath = os.path.abspath(os.path.expanduser(args.annotations_dirpath))
     args.predicted_dirpath = os.path.abspath(os.path.expanduser(args.predicted_dirpath))
 
+    if os.path.exists(args.annotations_dirpath) == False:
+        os.makedirs(args.annotations_dirpath)
+    if os.path.exists(args.predicted_dirpath) == False:
+        os.makedirs(args.predicted_dirpath)
+
     # parse .data file
     valid_path, names_path = None, None
     with open(args.data_path) as f:
