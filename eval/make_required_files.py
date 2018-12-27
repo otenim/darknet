@@ -33,7 +33,7 @@ def main(args):
         lines = f.readlines()
         for line in lines:
             # <type> = <path>
-            type, _, path = line.split('=')
+            type, path = line.split('=')
             type = type.strip()
             path = path.strip()
             if type == 'valid':
@@ -49,15 +49,6 @@ def main(args):
             line = line.strip()
             test_img_paths.append(line)
 
-    # load test image's annotations
-    labels_dirpath = os.path.join(os.path.dirname(os.path.dirname(pathimg_paths[0])), 'labels')
-    test_ano_paths = []
-    for path in os.listdir(labels_dirpath):
-        if path.split('.')[-1] != 'txt':
-            continue
-        path = os.path.join(labels_dirpath, path)
-        test_ano_paths.append(path)
-
     # load names file
     names = []
     with open(names_path) as f:
@@ -68,13 +59,14 @@ def main(args):
 
     # convert test annotation files and save them
     print('converting darknet-format annotation files...')
-    pbar = tqdm.tqdm(total=len(test_ano_paths))
+    labels_dirpath = os.path.join(os.path.dirname(os.path.dirname(test_img_paths[0])), 'labels')
+    pbar = tqdm.tqdm(total=len(test_img_paths))
     for path in test_img_paths:
         img = Image.open(path)
         img_w, img_h = img.width, img.height
-        img_format = imghdr.what(path)
-        src_ano_path = os.path.join(labels_dirpath, os.path.basename(path).replace('.' + img_format, '.txt'))
-        dst_ano_path = os.path.join(args.annotations_dirpath, os.path.basename(path).replace('.' + img_format, '.txt'))
+        prefix = os.path.basename(path).split('.')[0]
+        src_ano_path = os.path.join(labels_dirpath, prefix + '.txt')
+        dst_ano_path = os.path.join(args.annotations_dirpath, prefix + '.txt')
         buffer = []
         with open(src_ano_path) as f:
             lines = f.readlines()
