@@ -80,10 +80,10 @@ def main(args):
             for b in buffer:
                 cid, xc, yc, w, h = b
                 cname = names[cid].replace(' ', '-')
-                x_left = int(xc - img_w / 2)
-                y_top = int(yc - img_h / 2)
-                x_right = int(xc + img_w / 2)
-                y_bottom = int(yc + img_h / 2)
+                x_left = int(xc - w / 2)
+                y_top = int(yc - h / 2)
+                x_right = int(xc + w / 2)
+                y_bottom = int(yc + h / 2)
                 f.write('%s %d %d %d %d\n' % (cname, x_left, y_top, x_right, y_bottom))
         pbar.update()
     pbar.close()
