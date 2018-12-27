@@ -11,8 +11,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('cfg_path')
 parser.add_argument('data_path')
 parser.add_argument('weights_path')
-parser.add_argument('--annotations_dirpath', os.path.join(curdir, 'annotations'))
-parser.add_argument('--predicted_dirpath', os.path.join(curdir, 'predicted'))
+parser.add_argument('--annotations_dirpath', default=os.path.join(curdir, 'annotations'))
+parser.add_argument('--predicted_dirpath', default=os.path.join(curdir, 'predicted'))
 
 
 def main(args):
