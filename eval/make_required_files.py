@@ -111,7 +111,7 @@ def main(args):
         with open(pred_path, mode='w') as f:
             for bbox in bboxes:
                 cname, conf, (xc, yc, w, h) = bbox
-                cname = names_converted[cname]
+                cname = names_converted[cname.decode()]
                 x_left = int(xc - w / 2)
                 y_top = int(yc - h / 2)
                 x_right = int(xc + w / 2)
