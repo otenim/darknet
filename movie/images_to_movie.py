@@ -13,7 +13,7 @@ parser.add_argument('images_dirpath')
 parser.add_argument('cfg_path')
 parser.add_argument('data_path')
 parser.add_argument('weights_path')
-parser.add_argument('--out_path', type=str, default=os.path.join(curdir, 'result.mp4'))
+parser.add_argument('--out_path', type=str, default=os.path.join(curdir, 'out', 'result.mp4'))
 parser.add_argument('--fps', type=float, default=30.0)
 
 
@@ -23,6 +23,11 @@ def main(args):
     args.data_path = os.path.abspath(os.path.expanduser(args.data_path))
     args.weights_path = os.path.abspath(os.path.expanduser(args.weights_path))
     args.out_path = os.path.abspath(os.path.expanduser(args.out_path))
+
+    # create output directory (if neccessary)
+    out_dir = os.path.dirname(args.out_path)
+    if os.path.exists(out_dir) == False:
+        os.makedirs(out_dir)
 
     # load images (sort by name)
     image_paths = []
