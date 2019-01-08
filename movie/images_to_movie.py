@@ -54,13 +54,8 @@ def main(args):
             print('%d: %s' % (i + 1, line))
     print('=-=-=-=-=-=-=-=-=-= names =-=-=-=-=-=-=-=-=-=')
 
-    # load detector
-    print('loading detector...')
-    net = darknet.load_net(args.cfg_path.encode(), args.weights_path.encode(), 0)
-    meta = darknet.load_meta(args.data_path.encode())
-    print('the detector was successfully loaded.')
-
     # generate color map
+    # color_map['name'] = color
     print('=-=-=-=-=-=-=-=-=-= color map =-=-=-=-=-=-=-=-=-=')
     color_map = {}
     for name in names:
@@ -71,6 +66,12 @@ def main(args):
         color_map[name] = color
         print('color_map[\'%s\']: %s' % (name, str(color)))
     print('=-=-=-=-=-=-=-=-=-= color map =-=-=-=-=-=-=-=-=-=')
+
+    # load detector
+    print('loading detector...')
+    net = darknet.load_net(args.cfg_path.encode(), args.weights_path.encode(), 0)
+    meta = darknet.load_meta(args.data_path.encode())
+    print('the detector was successfully loaded.')
 
     # create movie
     print('creating movie...')
