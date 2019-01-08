@@ -13,6 +13,8 @@ parser.add_argument('images_dirpath')
 parser.add_argument('cfg_path')
 parser.add_argument('data_path')
 parser.add_argument('weights_path')
+parser.add_argument('--out_path', type=str, default=os.path.join(curdir, 'result.mp4'))
+parser.add_argument('--fps', type=float, default=30.0)
 
 
 def main(args):
@@ -20,6 +22,7 @@ def main(args):
     args.cfg_path = os.path.abspath(os.path.expanduser(args.cfg_path))
     args.data_path = os.path.abspath(os.path.expanduser(args.data_path))
     args.weights_path = os.path.abspath(os.path.expanduser(args.weights_path))
+    args.out_path = os.path.abspath(os.path.expanduser(args.out_path))
 
     # load images (sort by name)
     image_paths = []
@@ -75,13 +78,20 @@ def main(args):
 
     # create movie
     print('creating movie...')
+    frame_h, frame_w, _ = cv2.imread(image_paths[0]).shape
+    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+    movie = cv2.VideoWriter(args.out_path, fourcc, args.fps, (frame_h, frame_w))
     pbar = tqdm.tqdm(total=len(image_paths))
     for path in image_paths:
         img = cv2.imread(path)
         bboxes = darknet.detect(net, meta, path.encode())
         img = utils.draw_bounding_boxes(img, bboxes, color_map)
+        img = cv2.resize(img, (frame_h, frame_w))
+        video.write(img)
         pbar.update()
     pbar.close()
+    video.release()
+    print('output movie was saved as %s .' % args.out_path)
 
 
 if __name__ == '__main__':
