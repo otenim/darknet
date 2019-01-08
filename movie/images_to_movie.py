@@ -68,7 +68,7 @@ def main(args):
             random.randint(0, 255),
             random.randint(0, 255),
             random.randint(0, 255))
-        color_map['name'] = color
+        color_map[name] = color
         print('color_map[\'%s\']: %s' % (name, str(color)))
     print('=-=-=-=-=-=-=-=-=-= color map =-=-=-=-=-=-=-=-=-=')
 

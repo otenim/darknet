@@ -11,7 +11,7 @@ def draw_bounding_boxes(
 
     img_h, img_w, _ = img.shape
 
-    for box in bboxes:
+    for bbox in bboxes:
         cname, conf, (xc, yc, w, h) = bbox
         cname = cname.decode()
         xmin = int(xc - w / 2)
@@ -33,7 +33,7 @@ def draw_bounding_boxes(
         # paste the box's class name on img_out
         font_size = 12
         font = cv2.FONT_HERSHEY_SIMPLEX
-        label_w = font_size * (len(box_label))
+        label_w = font_size * (len(label))
         label_h = font_size
         cv2.rectangle( # background
             img_out,
