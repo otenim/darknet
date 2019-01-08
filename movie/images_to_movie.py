@@ -4,7 +4,8 @@ import os
 import tqdm
 import imghdr
 import darknet
-
+import utils
+import random
 
 curdir = os.path.dirname(os.path.abspath(__file__))
 parser = argparse.ArgumentParser()
@@ -19,7 +20,7 @@ def main(args):
     args.cfg_path = os.path.abspath(os.path.expanduser(args.cfg_path))
     args.data_path = os.path.abspath(os.path.expanduser(args.data_path))
     args.weights_path = os.path.abspath(os.path.expanduser(args.weights_path))
-    
+
     # load images (sort by name)
     image_paths = []
     for path in os.listdir(args.images_dirpath):
@@ -59,12 +60,25 @@ def main(args):
     meta = darknet.load_meta(args.data_path.encode())
     print('the detector was successfully loaded.')
 
-    # make video
-    print('creating video...')
+    # generate color map
+    print('=-=-=-=-=-=-=-=-=-= color map =-=-=-=-=-=-=-=-=-=')
+    color_map = {}
+    for name in names:
+        color = (
+            random.randint(0, 255),
+            random.randint(0, 255),
+            random.randint(0, 255))
+        color_map['name'] = color
+        print('color_map[\'%s\']: %s' % (name, str(color)))
+    print('=-=-=-=-=-=-=-=-=-= color map =-=-=-=-=-=-=-=-=-=')
+
+    # create movie
+    print('creating movie...')
     pbar = tqdm.tqdm(total=len(image_paths))
     for path in image_paths:
-        src_img = cv2.imread(path)
+        img = cv2.imread(path)
         bboxes = darknet.detect(net, meta, path.encode())
+        img = utils.draw_bounding_boxes(img, bboxes, color_map)
         pbar.update()
     pbar.close()
 
