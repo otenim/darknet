@@ -12,9 +12,6 @@ parser.add_argument('images_dirpath')
 parser.add_argument('cfg_path')
 parser.add_argument('data_path')
 parser.add_argument('weights_path')
-parser.add_argument('--prefix', type=str, default='capture')
-parser.add_argument('--origindex', type=int, default=1)
-parser.add_argument('--imgfmt', type=str, default='jpg')
 
 
 def main(args):
@@ -22,6 +19,16 @@ def main(args):
     args.cfg_path = os.path.abspath(os.path.expanduser(args.cfg_path))
     args.data_path = os.path.abspath(os.path.expanduser(args.data_path))
     args.weights_path = os.path.abspath(os.path.expanduser(args.weights_path))
+    
+    # load images (sort by name)
+    image_paths = []
+    for path in os.listdir(args.images_dirpath):
+        path = os.path.join(args.images_dirpath, path)
+        if imghdr.what(path) == None:
+            continue
+        image_paths.append(path)
+    image_paths.sort()
+    print('%s input images were loaded.' % len(image_paths))
 
     # parse .data file
     names_path = None
@@ -37,38 +44,20 @@ def main(args):
 
     # load names file
     names = []
+    print('=-=-=-=-=-=-=-=-=-= names =-=-=-=-=-=-=-=-=-=')
     with open(names_path) as f:
         lines = f.readlines()
-        for line in lines:
+        for i, line in enumerate(lines):
             line = line.strip()
             names.append(line)
-    print('names: %s.' % str(names))
+            print('%d: %s' % (i + 1, line))
+    print('=-=-=-=-=-=-=-=-=-= names =-=-=-=-=-=-=-=-=-=')
 
     # load detector
     print('loading detector...')
     net = darknet.load_net(args.cfg_path.encode(), args.weights_path.encode(), 0)
     meta = darknet.load_meta(args.data_path.encode())
     print('the detector was successfully loaded.')
-
-    # count images
-    n_images = 0
-    for path in os.listdir(args.images_dirpath):
-        path = os.path.join(args.images_dirpath, path)
-        if imghdr.what(path) == None:
-            continue
-        n_images += 1
-    n_digits = len(str(n_images))
-    print('%s input images were loaded.' % n_images)
-
-    # check images
-    image_paths = []
-    print('validating input images...')
-    for i in range(args.origindex, n_images + args.origindex):
-        path = os.path.join(args.images_dirpath, args.prefix + str(i).zfill(n_digits) + '.' + args.imgfmt)
-        if os.path.exists(path) == False:
-            raise Exception('%s was not found.' % path)
-        image_paths.append(path)
-    print('all the input images are valid.')
 
     # make video
     print('creating video...')
