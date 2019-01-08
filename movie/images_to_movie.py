@@ -87,10 +87,10 @@ def main(args):
         bboxes = darknet.detect(net, meta, path.encode())
         img = utils.draw_bounding_boxes(img, bboxes, color_map)
         img = cv2.resize(img, (frame_h, frame_w))
-        video.write(img)
+        movie.write(img)
         pbar.update()
     pbar.close()
-    video.release()
+    movie.release()
     print('output movie was saved as %s .' % args.out_path)
 
 
